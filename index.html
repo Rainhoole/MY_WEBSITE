@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rainhoole Luo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;500&family=Inter:wght@400;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.5s ease;
+  }
+  a { color: inherit; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .ticket-wrapper {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    transition: all 0.5s ease;
+  }
+
+  .visual-zone {
+    position: relative;
+    overflow: hidden;
+    flex: 1 1 50%;
+    transition: all 0.5s ease;
+  }
+  .visual-zone canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .overlay-text {
+    position: absolute;
+    top: 1.5rem;
+    left: 1.5rem;
+    pointer-events: none;
+    z-index: 10;
+    transition: all 0.5s ease;
+  }
+  .overlay-title { display: block; }
+  .overlay-subtitle { display: block; }
+
+  .data-zone {
+    flex: 1 1 50%;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+    transition: all 0.5s ease;
+  }
+
+  .data-grid {
+    display: grid;
+    row-gap: 6px;
+    transition: all 0.5s ease;
+  }
+
+  .data-label { grid-column: 1; text-transform: uppercase; }
+  .data-sep { grid-column: 2; }
+  .data-value { grid-column: 3; }
+  .data-spacer { grid-column: 1 / -1; height: 10px; }
+
+  .texture-divider {
+    white-space: nowrap;
+    overflow: hidden;
+    line-height: 1;
+    transition: all 0.5s ease;
+  }
+
+  .footer-block {
+    margin-top: auto;
+    transition: all 0.5s ease;
+  }
+  .footer-line {
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+  }
+
+  .square-bullet {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    margin: 0 8px;
+    vertical-align: 1px;
+    transition: all 0.5s ease;
+  }
+
+  .switch-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    border: none;
+    cursor: pointer;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+  }
+  .switch-btn:hover { opacity: 1; transform: scale(1.05); }
+
+  /* Mobile */
+  @media (max-width: 599px) {
+    .ticket-wrapper {
+      width: 100vw;
+      min-height: 100vh;
+      flex-direction: column;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+    }
+    .visual-zone {
+      min-height: 260px;
+      border-right: none !important;
+    }
+  }
+
+  /* Desktop */
+  @media (min-width: 600px) {
+    .ticket-wrapper {
+      width: 800px;
+      height: 420px;
+      flex-direction: row;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="ticket-wrapper" id="ticket">
+  <!-- Visual Zone -->
+  <div class="visual-zone" id="visualZone">
+    <div class="overlay-text" id="overlayText">
+      <span class="overlay-title" id="overlayTitle">RAINHOOLE</span>
+      <span class="overlay-subtitle" id="overlaySubtitle">PONZINOMICS &amp; NARRATIVE ENGINEERING</span>
+    </div>
+    <canvas id="glCanvas"></canvas>
+  </div>
+
+  <!-- Data Zone -->
+  <div class="data-zone" id="dataZone">
+    <div class="data-grid" id="gridTop">
+      <div class="data-label" id="label1">ROLE</div>
+      <div class="data-sep" id="sep1"></div>
+      <div class="data-value" id="val1">FOR WORLD PEACE</div>
+
+      <div class="data-label" id="label2">FOCUS</div>
+      <div class="data-sep" id="sep2"></div>
+      <div class="data-value" id="val2">PONZINOMICS & NARRATIVE ENGINEERING</div>
+
+      <div class="data-label" id="label8">EDU</div>
+      <div class="data-sep" id="sep8"></div>
+      <div class="data-value" id="val8"><a href="https://www.ntu.edu.sg/" target="_blank">NTU · FINTECH</a></div>
+
+      <div class="data-spacer"></div>
+
+      <div class="data-label" id="label3">X</div>
+      <div class="data-sep" id="sep3"></div>
+      <div class="data-value" id="val3"><a href="https://x.com/Rainhoole" target="_blank">@RAINHOOLE</a></div>
+
+      <div class="data-label" id="label4">TELEGRAM</div>
+      <div class="data-sep" id="sep4"></div>
+      <div class="data-value" id="val4"><a href="https://t.me/RainhooleResearch" target="_blank">@RAINHOOLE</a></div>
+
+      <div class="data-label" id="label5">RESEARCH</div>
+      <div class="data-sep" id="sep5"></div>
+      <div class="data-value" id="val5"><a href="https://t.me/RainhooleResearch" target="_blank">RAINHOOLE RESEARCH</a></div>
+    </div>
+
+    <div class="texture-divider" id="divider"></div>
+
+    <div class="data-grid" id="gridBottom">
+      <div class="data-label" id="label6">BUILD 01</div>
+      <div class="data-sep" id="sep6"></div>
+      <div class="data-value" id="val6"><a href="https://rainhoole.com/Global-Settlement-Feasibility-Radar-GSFR-/" target="_blank">GSFR · GLOBAL SETTLEMENT RADAR</a></div>
+
+      <div class="data-label" id="label7">BUILD 02</div>
+      <div class="data-sep" id="sep7"></div>
+      <div class="data-value" id="val7"><a href="https://axisrobotics.ai/" target="_blank">AXIS ROBOTICS</a></div>
+    </div>
+
+    <div class="footer-block" id="footer">
+      <div class="footer-line" id="footerMain">
+        <span>RAINHOOLE LUO <span class="square-bullet" id="bullet"></span> EST. 1998</span>
+      </div>
+      <div class="footer-line" id="footerSub">
+        <span>TG: @RAINHOOLE</span>
+        <span>BUILDING THE FUTURE</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="switch-btn" id="switchBtn" onclick="nextTheme()">SWITCH STYLE</button>
+
+<script>
+// ========================================================
+// THEME DEFINITIONS
+// ========================================================
+const themes = [
+  // 0: Mono Dark
+  {
+    name: 'Mono Dark',
+    font: "'Space Mono', monospace",
+    bodyBg: '#121212',
+    ticketBg: '#2A2A2A',
+    textColor: '#E8E4DC',
+    labelColor: 'rgba(232,228,220,0.6)',
+    sepChar: '>',
+    sepColor: 'rgba(232,228,220,0.4)',
+    accentColor: '#E8E4DC',
+    borderColor: 'rgba(232,228,220,0.1)',
+    borderWidth: '0px',
+    borderRadius: '12px',
+    shadow: '0 30px 80px rgba(0,0,0,0.8)',
+    visualBg: '#2A2A2A',
+    visualBorderRight: '1px solid rgba(232,228,220,0.1)',
+    overlayFontSize: '0.7rem',
+    overlayLetterSpacing: '2px',
+    overlayFontWeight: 400,
+    overlayColor: '#E8E4DC',
+    overlayOpacity: 0.8,
+    subtitleStyle: { marginTop: '8px', fontSize: '0.6rem', opacity: 0.5, letterSpacing: '2px' },
+    dataPadding: '2rem 1.5rem 1.5rem 1.5rem',
+    dataFontSize: '0.75rem',
+    gridCols: '70px 20px 1fr',
+    dividerText: 'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+    dividerStyle: { letterSpacing: '1px', opacity: 0.2, fontSize: '0.7rem', margin: '1.2rem 0', color: '#E8E4DC' },
+    footerBorder: '1px solid rgba(232,228,220,0.15)',
+    footerPadding: '1rem',
+    footerFontSize: '0.65rem',
+    footerSubOpacity: 0.4,
+    bulletStyle: { backgroundColor: '#E8E4DC', opacity: 0.5, borderRadius: '0' },
+    switchBtnBg: '#E8E4DC',
+    switchBtnColor: '#2A2A2A',
+    // WebGL
+    dotColor: [0.91, 0.89, 0.86],
+    dotScale: 60.0,
+    dotSpeed: 0.15,
+    dotNoiseScale: 0.08,
+    dotEdge: 0.06,
+    dotMaxRadius: 0.42,
+    dotShape: 'circle',
+    clearColor: [0, 0, 0, 0],
+    blendMode: 'normal',
+    canvasOpacity: 1,
+    canvasMix: 'normal',
+  },
+  // 1: Organic Warm
+  {
+    name: 'Organic Warm',
+    font: "'Outfit', sans-serif",
+    bodyBg: '#9EA090',
+    ticketBg: '#F3F0EB',
+    textColor: '#59524B',
+    labelColor: '#9C948A',
+    sepChar: '+',
+    sepColor: '#D48C70',
+    accentColor: '#D48C70',
+    borderColor: '#D6CFC7',
+    borderWidth: '1px',
+    borderRadius: '2px',
+    shadow: '0 20px 40px rgba(0,0,0,0.1)',
+    visualBg: '#F3F0EB',
+    visualBorderRight: '1px solid #D6CFC7',
+    overlayFontSize: '0.85rem',
+    overlayLetterSpacing: '1px',
+    overlayFontWeight: 500,
+    overlayColor: '#59524B',
+    overlayOpacity: 1,
+    subtitleStyle: { marginTop: '8px', fontSize: '0.65rem', opacity: 0.5, padding: '4px 8px', border: '1px solid #D6CFC7', borderRadius: '50px', background: 'rgba(255,255,255,0.5)', color: '#9C948A', letterSpacing: '1px' },
+    dataPadding: '1.5rem 2rem',
+    dataFontSize: '0.8rem',
+    gridCols: '80px 20px 1fr',
+    dividerText: '· · · · · · · · · · · · · · · · · · · · · · · · ·',
+    dividerStyle: { letterSpacing: '4px', opacity: 0.5, fontSize: '0.6rem', padding: '1rem 0', color: '#D6CFC7', fontFamily: 'monospace', textAlign: 'center' },
+    footerBorder: 'none',
+    footerPadding: '1.5rem 2rem',
+    footerFontSize: '0.7rem',
+    footerSubOpacity: 1,
+    footerSubColor: '#9C948A',
+    bulletStyle: { backgroundColor: '#D48C70', borderRadius: '50%' },
+    switchBtnBg: '#59524B',
+    switchBtnColor: '#F3F0EB',
+    dotColor: [0.83, 0.55, 0.44],
+    dotScale: 40.0,
+    dotSpeed: 0.1,
+    dotNoiseScale: 0.05,
+    dotEdge: 0.15,
+    dotMaxRadius: 0.45,
+    dotShape: 'circle',
+    clearColor: [0, 0, 0, 0],
+    blendMode: 'normal',
+    canvasOpacity: 0.8,
+    canvasMix: 'normal',
+  },
+  // 2: Brutalist
+  {
+    name: 'Brutalist',
+    font: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    bodyBg: '#F0F0F0',
+    bodyBgImage: 'linear-gradient(rgba(0,0,0,0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.18) 1px, transparent 1px)',
+    bodyBgSize: '50px 50px',
+    bodyBgPosition: 'center',
+    ticketBg: '#FFFFFF',
+    textColor: '#000000',
+    labelColor: '#000000',
+    sepChar: '',
+    sepColor: '#000000',
+    accentColor: '#000000',
+    borderColor: '#000000',
+    borderWidth: '2px',
+    borderRadius: '4px',
+    shadow: '12px 12px 0px rgba(0,0,0,1)',
+    visualBg: '#FFFFFF',
+    visualBorderRight: '2px solid #000000',
+    overlayFontSize: '0.85rem',
+    overlayLetterSpacing: '-0.02em',
+    overlayFontWeight: 800,
+    overlayColor: '#000000',
+    overlayOpacity: 1,
+    subtitleStyle: { marginTop: '12px', fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.1em', background: '#000', color: '#fff', display: 'inline-block', padding: '2px 6px', textTransform: 'uppercase' },
+    dataPadding: '2rem',
+    dataFontSize: '0.8rem',
+    gridCols: '80px 10px 1fr',
+    labelFontSize: '0.7rem',
+    labelFontWeight: 800,
+    labelLetterSpacing: '0.05em',
+    valueFontWeight: 400,
+    dividerText: '//////////////////////////////////////////////////',
+    dividerStyle: { letterSpacing: '2px', opacity: 1, fontSize: '0.7rem', margin: '1.5rem 0', color: '#000000', fontFamily: "'Space Mono', monospace" },
+    footerBorder: '2px solid #000000',
+    footerPadding: '1rem 0 0 0',
+    footerFontSize: '0.7rem',
+    footerFontWeight: 600,
+    footerSubOpacity: 1,
+    footerSubColor: '#000000',
+    footerSubFont: "'Space Mono', monospace",
+    footerSubFontSize: '0.6rem',
+    bulletStyle: { backgroundColor: '#000000', borderRadius: '50%', opacity: 1 },
+    switchBtnBg: '#000000',
+    switchBtnColor: '#FFFFFF',
+    dotColor: [0.0, 0.0, 0.0],
+    dotScale: 40.0,
+    dotSpeed: 0.15,
+    dotNoiseScale: 0.05,
+    dotEdge: 0.02,
+    dotMaxRadius: 0.45,
+    dotShape: 'circle',
+    clearColor: [0, 0, 0, 0],
+    blendMode: 'normal',
+    canvasOpacity: 1,
+    canvasMix: 'multiply',
+  },
+  // 3: Emerald
+  {
+    name: 'Emerald',
+    font: "'DM Sans', sans-serif",
+    bodyBg: '#111111',
+    ticketBg: '#033B32',
+    textColor: '#FFFFFF',
+    labelColor: '#80CBC4',
+    sepChar: '',
+    sepColor: '#80CBC4',
+    accentColor: '#80CBC4',
+    borderColor: 'rgba(255,255,255,0.1)',
+    borderWidth: '0px',
+    borderRadius: '20px',
+    shadow: '0 40px 100px rgba(0,0,0,0.6)',
+    visualBg: '#022C25',
+    visualBorderRight: 'none',
+    overlayFontSize: '1rem',
+    overlayLetterSpacing: '-0.02em',
+    overlayFontWeight: 700,
+    overlayColor: '#FFFFFF',
+    overlayOpacity: 1,
+    overlayTop: '2.5rem',
+    overlayLeft: '2.5rem',
+    subtitleStyle: { marginTop: '1rem', fontSize: '0.75rem', fontWeight: 500, opacity: 0.6, letterSpacing: '0.05em', color: '#80CBC4' },
+    dataPadding: '3rem',
+    dataFontSize: '0.9rem',
+    gridCols: '80px 1fr',
+    twoColGrid: true,
+    valueAlign: 'right',
+    dividerText: 'LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL',
+    dividerStyle: { letterSpacing: '2px', opacity: 0.1, fontSize: '0.7rem', margin: 'auto 0 1.5rem 0', color: '#80CBC4', fontFamily: 'monospace' },
+    footerBorder: '1px solid rgba(255,255,255,0.1)',
+    footerPadding: '1.5rem 0 0 0',
+    footerFontSize: '0.75rem',
+    footerSubOpacity: 0.4,
+    bulletStyle: { backgroundColor: '#80CBC4', borderRadius: '50%', opacity: 0.8 },
+    switchBtnBg: '#80CBC4',
+    switchBtnColor: '#033B32',
+    dotColor: [0.50, 0.80, 0.77],
+    dotScale: 40.0,
+    dotSpeed: 0.1,
+    dotNoiseScale: 0.05,
+    dotEdge: 0.15,
+    dotMaxRadius: 0.45,
+    dotShape: 'circle',
+    clearColor: [0, 0, 0, 0],
+    blendMode: 'screen',
+    canvasOpacity: 0.8,
+    canvasMix: 'screen',
+    dotGradient: true,
+  },
+  // 4: Neon Orange
+  {
+    name: 'Neon Orange',
+    font: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    bodyBg: '#000000',
+    ticketBg: '#050505',
+    textColor: '#FFFFFF',
+    labelColor: '#555555',
+    sepChar: '',
+    sepColor: '#FF3B00',
+    accentColor: '#FF3B00',
+    borderColor: '#222',
+    borderWidth: '1px',
+    borderRadius: '16px',
+    shadow: '0 40px 100px rgba(0,0,0,0.9)',
+    visualBg: '#050505',
+    visualBorderRight: '1px solid #333333',
+    overlayFontSize: '1.5rem',
+    overlayLetterSpacing: '-0.02em',
+    overlayFontWeight: 700,
+    overlayColor: '#FFFFFF',
+    overlayOpacity: 1,
+    overlayTop: '2rem',
+    overlayLeft: '2rem',
+    subtitleStyle: { marginTop: '12px', fontSize: '0.65rem', color: '#FF3B00', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 400 },
+    dataPadding: '2rem 2.5rem',
+    dataFontSize: '0.875rem',
+    gridCols: '80px 20px 1fr',
+    labelFontSize: '0.7rem',
+    labelFontWeight: 600,
+    labelLetterSpacing: '0.05em',
+    valueFontSize: '1rem',
+    valueFontWeight: 600,
+    dividerCustom: true,
+    dividerStyle: { background: '#222', height: '12px', position: 'relative', margin: '2rem 0 1rem 0', overflow: 'hidden' },
+    dividerFillColor: '#FF3B00',
+    dividerFillWidth: '75%',
+    footerBorder: 'none',
+    footerPadding: '1rem 0 0 0',
+    footerFontSize: '0.75rem',
+    footerSubOpacity: 1,
+    footerSubColor: '#555555',
+    footerSubFontSize: '0.7rem',
+    bulletStyle: { backgroundColor: '#FF3B00', borderRadius: '1px' },
+    switchBtnBg: '#FF3B00',
+    switchBtnColor: '#000000',
+    dotColor: [1.0, 0.23, 0.0],
+    dotScale: 40.0,
+    dotSpeed: 0.1,
+    dotNoiseScale: 0.05,
+    dotEdge: 0.15,
+    dotMaxRadius: 0.45,
+    dotShape: 'square',
+    clearColor: [0.02, 0.02, 0.02, 1],
+    blendMode: 'normal',
+    canvasOpacity: 1,
+    canvasMix: 'normal',
+    mouseMode: 'attract',
+    mouseStrength: 1.0,
+    mouseRadius: 0.4,
+  },
+  // 5: Matrix
+  {
+    name: 'Matrix',
+    font: "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    bodyBg: '#0a0a0a',
+    ticketBg: '#000000',
+    textColor: '#FFFFFF',
+    labelColor: '#888888',
+    sepChar: '',
+    sepColor: '#00FF41',
+    accentColor: '#00FF41',
+    borderColor: '#333333',
+    borderWidth: '2px',
+    borderRadius: '12px',
+    shadow: '0 20px 50px rgba(0,0,0,0.5), 0 0 20px rgba(0,255,65,0.05)',
+    visualBg: '#000000',
+    visualBorderRight: '2px solid #333333',
+    overlayFontSize: '0.85rem',
+    overlayLetterSpacing: '-0.02em',
+    overlayFontWeight: 800,
+    overlayColor: '#FFFFFF',
+    overlayOpacity: 1,
+    subtitleStyle: { marginTop: '12px', fontSize: '0.6rem', fontWeight: 600, letterSpacing: '0.1em', backgroundColor: '#00FF41', color: '#000', display: 'inline-block', padding: '2px 6px' },
+    dataPadding: '2rem',
+    dataFontSize: '0.8rem',
+    gridCols: '80px 10px 1fr',
+    labelFontSize: '0.7rem',
+    labelFontWeight: 800,
+    labelLetterSpacing: '0.05em',
+    dividerText: '//////////////////////////////////////////////////',
+    dividerStyle: { letterSpacing: '2px', opacity: 0.8, fontSize: '0.7rem', margin: '1.5rem 0', color: '#00FF41', fontFamily: "'Space Mono', monospace" },
+    footerBorder: '2px solid #333333',
+    footerPadding: '1rem 0 0 0',
+    footerFontSize: '0.7rem',
+    footerFontWeight: 600,
+    footerSubOpacity: 1,
+    footerSubColor: '#666666',
+    footerSubFont: "'Space Mono', monospace",
+    footerSubFontSize: '0.6rem',
+    bulletStyle: { backgroundColor: '#00FF41', borderRadius: '50%', boxShadow: '0 0 8px #00FF41' },
+    switchBtnBg: '#00FF41',
+    switchBtnColor: '#000000',
+    dotColor: [0.0, 1.0, 0.255],
+    dotScale: 35.0,
+    dotSpeed: 0.25,
+    dotNoiseScale: 0.08,
+    dotEdge: 0.05,
+    dotMaxRadius: 0.45,
+    dotShape: 'glow',
+    clearColor: [0, 0, 0, 1],
+    blendMode: 'additive',
+    canvasOpacity: 1,
+    canvasMix: 'normal',
+    bodyBgGrid: true,
+    mouseMode: 'repel',
+    mouseStrength: 1.15,
+    mouseRadius: 0.42,
+  },
+];
+
+// ========================================================
+// STATE
+// ========================================================
+let currentTheme = Math.floor(Math.random() * themes.length);
+let gl, program, resolutionLoc, timeLoc, mouseLoc, mouseModeLoc, mouseStrengthLoc, positionLoc;
+let animFrame;
+const mouseState = {
+  x: 0,
+  y: 0,
+  targetX: 0,
+  targetY: 0,
+  inside: false,
+  mode: 'attract',
+  strength: 0.9,
+};
+
+// ========================================================
+// INTERACTION
+// ========================================================
+function updateMouseTarget(clientX, clientY) {
+  const canvas = document.getElementById('glCanvas');
+  if (!canvas) return;
+  const rect = canvas.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  mouseState.targetX = (clientX - rect.left) * dpr;
+  mouseState.targetY = (rect.height - (clientY - rect.top)) * dpr;
+}
+
+function initMouseTracking() {
+  const visual = document.getElementById('visualZone');
+  if (!visual) return;
+  visual.addEventListener('mousemove', (event) => {
+    mouseState.inside = true;
+    updateMouseTarget(event.clientX, event.clientY);
+  });
+  visual.addEventListener('mouseenter', () => {
+    mouseState.inside = true;
+  });
+  visual.addEventListener('mouseleave', () => {
+    mouseState.inside = false;
+  });
+  visual.addEventListener('touchstart', (event) => {
+    if (!event.touches || !event.touches.length) return;
+    mouseState.inside = true;
+    updateMouseTarget(event.touches[0].clientX, event.touches[0].clientY);
+  }, { passive: true });
+  visual.addEventListener('touchmove', (event) => {
+    if (!event.touches || !event.touches.length) return;
+    mouseState.inside = true;
+    updateMouseTarget(event.touches[0].clientX, event.touches[0].clientY);
+  }, { passive: true });
+  visual.addEventListener('touchend', () => {
+    mouseState.inside = false;
+  }, { passive: true });
+}
+
+// ========================================================
+// WEBGL SETUP
+// ========================================================
+function initGL() {
+  const canvas = document.getElementById('glCanvas');
+  gl = canvas.getContext('webgl', { antialias: true, alpha: true });
+  if (!gl) return;
+  resizeCanvas();
+  mouseState.x = canvas.width * 0.5;
+  mouseState.y = canvas.height * 0.5;
+  mouseState.targetX = mouseState.x;
+  mouseState.targetY = mouseState.y;
+  window.addEventListener('resize', resizeCanvas);
+}
+
+function resizeCanvas() {
+  const canvas = document.getElementById('glCanvas');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  if (!mouseState.inside) {
+    mouseState.targetX = canvas.width * 0.5;
+    mouseState.targetY = canvas.height * 0.5;
+  }
+  if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
+}
+
+function buildShader(theme) {
+  if (!gl) return;
+  if (program) {
+    gl.deleteProgram(program);
+  }
+
+  const vsSource = `
+    attribute vec4 aVertexPosition;
+    void main() { gl_Position = aVertexPosition; }
+  `;
+
+  let shapeCode;
+  if (theme.dotShape === 'square') {
+    shapeCode = `
+      float dist = max(abs(fractUv.x), abs(fractUv.y));
+      float block = step(0.4, finalNoise);
+      float margin = 0.45;
+      float alpha = 1.0 - step(margin, dist);
+      vec3 orange = vec3(${theme.dotColor[0].toFixed(2)}, ${theme.dotColor[1].toFixed(2)}, ${theme.dotColor[2].toFixed(2)});
+      vec3 grey = vec3(0.2, 0.2, 0.2);
+      vec3 finalColor = mix(grey, orange, step(0.65, finalNoise));
+      gl_FragColor = vec4(finalColor, alpha * block);
+    `;
+  } else if (theme.dotShape === 'glow') {
+    shapeCode = `
+      float targetRadius = smoothstep(0.1, 0.9, finalNoise) * ${theme.dotMaxRadius.toFixed(2)};
+      float dist = length(fractUv);
+      float dotAlpha = smoothstep(targetRadius + 0.05, targetRadius - 0.1, dist);
+      float glow = exp(-dist * 8.0) * targetRadius * 2.5;
+      vec3 dotColor = vec3(${theme.dotColor[0].toFixed(2)}, ${theme.dotColor[1].toFixed(2)}, ${theme.dotColor[2].toFixed(2)});
+      vec3 finalColor = dotColor * (dotAlpha + glow);
+      gl_FragColor = vec4(finalColor, dotAlpha + (glow * 0.3));
+    `;
+  } else {
+    let extra = '';
+    if (theme.dotGradient) {
+      extra = `dotAlpha *= (0.3 + st.y * 0.3);`;
+    }
+    shapeCode = `
+      float targetRadius = smoothstep(0.3, 0.7, finalNoise) * ${theme.dotMaxRadius.toFixed(2)};
+      float dist = length(fractUv);
+      float edge = ${theme.dotEdge.toFixed(2)};
+      float dotAlpha = 1.0 - smoothstep(targetRadius - edge, targetRadius + edge, dist);
+      ${extra}
+      vec3 dotColor = vec3(${theme.dotColor[0].toFixed(2)}, ${theme.dotColor[1].toFixed(2)}, ${theme.dotColor[2].toFixed(2)});
+      gl_FragColor = vec4(dotColor, dotAlpha * 0.9);
+    `;
+  }
+
+  const fsSource = `
+    precision highp float;
+    uniform vec2 u_resolution;
+    uniform float u_time;
+    uniform vec2 u_mouse;
+    uniform float u_mouse_mode;
+    uniform float u_mouse_strength;
+
+    vec3 permute(vec3 x) { return mod(((x*34.0)+1.0)*x, 289.0); }
+    float snoise(vec2 v){
+      const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+      vec2 i  = floor(v + dot(v, C.yy));
+      vec2 x0 = v - i + dot(i, C.xx);
+      vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+      vec4 x12 = x0.xyxy + C.xxzz;
+      x12.xy -= i1;
+      i = mod(i, 289.0);
+      vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+      vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
+      m = m*m; m = m*m;
+      vec3 x = 2.0 * fract(p * C.www) - 1.0;
+      vec3 h = abs(x) - 0.5;
+      vec3 ox = floor(x + 0.5);
+      vec3 a0 = x - ox;
+      m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
+      vec3 g;
+      g.x  = a0.x  * x0.x  + h.x  * x0.y;
+      g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+      return 130.0 * dot(m, g);
+    }
+
+    void main() {
+      vec2 st = gl_FragCoord.xy/u_resolution.xy;
+      st.x *= u_resolution.x/u_resolution.y;
+      vec2 mouse = u_mouse / u_resolution;
+      mouse.x *= u_resolution.x/u_resolution.y;
+      vec2 delta = st - mouse;
+      float mouseDist = length(delta);
+      float mouseField = exp(-mouseDist / ${((theme.mouseRadius || 0.35) * 0.75).toFixed(2)});
+      vec2 deltaDir = normalize(delta + vec2(0.0001));
+      if (u_mouse_mode > 0.5 && u_mouse_mode < 1.5) {
+        st += deltaDir * mouseField * 0.32 * u_mouse_strength;
+      } else if (u_mouse_mode > 1.5) {
+        st -= deltaDir * mouseField * 0.32 * u_mouse_strength;
+      }
+      float scale = ${theme.dotScale.toFixed(1)};
+      vec2 gridUv = st * scale;
+      vec2 id = floor(gridUv);
+      vec2 fractUv = fract(gridUv) - 0.5;
+      float t = u_time * ${theme.dotSpeed.toFixed(2)};
+      float n1 = snoise(id * ${theme.dotNoiseScale.toFixed(2)} + vec2(t, t*0.3));
+      float finalNoise = n1 * 0.5 + 0.5;
+      ${shapeCode}
+    }
+  `;
+
+  function createShader(type, source) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
+    return shader;
+  }
+
+  const vs = createShader(gl.VERTEX_SHADER, vsSource);
+  const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+  program = gl.createProgram();
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+
+  const positionBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,1,1,1,-1,-1,1,-1]), gl.STATIC_DRAW);
+
+  positionLoc = gl.getAttribLocation(program, 'aVertexPosition');
+  resolutionLoc = gl.getUniformLocation(program, 'u_resolution');
+  timeLoc = gl.getUniformLocation(program, 'u_time');
+  mouseLoc = gl.getUniformLocation(program, 'u_mouse');
+  mouseModeLoc = gl.getUniformLocation(program, 'u_mouse_mode');
+  mouseStrengthLoc = gl.getUniformLocation(program, 'u_mouse_strength');
+
+  gl.useProgram(program);
+  gl.enableVertexAttribArray(positionLoc);
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+  gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+}
+
+function startRender() {
+  if (animFrame) cancelAnimationFrame(animFrame);
+  const theme = themes[currentTheme];
+  const cc = theme.clearColor;
+
+  function render(time) {
+    time *= 0.001;
+    const canvas = document.getElementById('glCanvas');
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    gl.clearColor(cc[0], cc[1], cc[2], cc[3]);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.useProgram(program);
+    gl.uniform2f(resolutionLoc, canvas.width, canvas.height);
+    gl.uniform1f(timeLoc, time);
+    const smoothing = mouseState.inside ? 0.22 : 0.08;
+    mouseState.x += (mouseState.targetX - mouseState.x) * smoothing;
+    mouseState.y += (mouseState.targetY - mouseState.y) * smoothing;
+    const modeValue = mouseState.mode === 'repel' ? 1 : mouseState.mode === 'attract' ? 2 : 0;
+    const strengthValue = mouseState.inside ? mouseState.strength : 0;
+    if (mouseLoc) gl.uniform2f(mouseLoc, mouseState.x, mouseState.y);
+    if (mouseModeLoc) gl.uniform1f(mouseModeLoc, modeValue);
+    if (mouseStrengthLoc) gl.uniform1f(mouseStrengthLoc, strengthValue);
+    gl.enable(gl.BLEND);
+    if (theme.blendMode === 'additive') {
+      gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+    } else {
+      gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+    }
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    animFrame = requestAnimationFrame(render);
+  }
+  animFrame = requestAnimationFrame(render);
+}
+
+// ========================================================
+// APPLY THEME TO DOM
+// ========================================================
+function applyTheme(index) {
+  const t = themes[index];
+  const body = document.body;
+  const ticket = document.getElementById('ticket');
+  const vz = document.getElementById('visualZone');
+  const canvas = document.getElementById('glCanvas');
+  const overlay = document.getElementById('overlayText');
+  const title = document.getElementById('overlayTitle');
+  const subtitle = document.getElementById('overlaySubtitle');
+  const dz = document.getElementById('dataZone');
+  const gridTop = document.getElementById('gridTop');
+  const gridBottom = document.getElementById('gridBottom');
+  const divider = document.getElementById('divider');
+  const footer = document.getElementById('footer');
+  const footerMain = document.getElementById('footerMain');
+  const footerSub = document.getElementById('footerSub');
+  const bullet = document.getElementById('bullet');
+  const btn = document.getElementById('switchBtn');
+
+  // Body
+  body.style.backgroundColor = t.bodyBg;
+  body.style.fontFamily = t.font;
+  body.style.color = t.textColor;
+  if (t.bodyBgImage) {
+    body.style.backgroundImage = t.bodyBgImage;
+    body.style.backgroundSize = t.bodyBgSize || 'auto';
+    body.style.backgroundPosition = t.bodyBgPosition || '0 0';
+  } else if (t.bodyBgGrid) {
+    body.style.backgroundImage = 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)';
+    body.style.backgroundSize = '50px 50px';
+    body.style.backgroundPosition = '0 0';
+  } else {
+    body.style.backgroundImage = 'none';
+    body.style.backgroundSize = '';
+    body.style.backgroundPosition = '';
+  }
+
+  // Ticket
+  ticket.style.backgroundColor = t.ticketBg;
+  ticket.style.border = t.borderWidth + ' solid ' + t.borderColor;
+  ticket.style.borderRadius = t.borderRadius;
+  ticket.style.boxShadow = t.shadow;
+  ticket.style.fontFamily = t.font;
+  ticket.style.color = t.textColor;
+
+  // Visual zone
+  vz.style.backgroundColor = t.visualBg;
+  vz.style.borderRight = t.visualBorderRight;
+
+  // Canvas
+  canvas.style.opacity = t.canvasOpacity;
+  canvas.style.mixBlendMode = t.canvasMix;
+
+  // Overlay
+  overlay.style.top = t.overlayTop || '1.5rem';
+  overlay.style.left = t.overlayLeft || '1.5rem';
+  overlay.style.fontSize = t.overlayFontSize;
+  overlay.style.letterSpacing = t.overlayLetterSpacing;
+  overlay.style.fontWeight = t.overlayFontWeight;
+  overlay.style.color = t.overlayColor;
+  overlay.style.opacity = t.overlayOpacity;
+  overlay.style.lineHeight = '1.2';
+
+  // Title
+  if (t.overlayBadge) {
+    Object.assign(title.style, t.overlayBadgeStyle || {});
+  } else {
+    title.style.background = '';
+    title.style.padding = '';
+    title.style.border = '';
+    title.style.display = 'block';
+  }
+
+  // Subtitle
+  Object.keys(subtitle.style).forEach(() => {});
+  subtitle.style.display = 'block';
+  subtitle.style.marginTop = '';
+  subtitle.style.fontSize = '';
+  subtitle.style.opacity = '';
+  subtitle.style.letterSpacing = '';
+  subtitle.style.fontWeight = '';
+  subtitle.style.color = '';
+  subtitle.style.padding = '';
+  subtitle.style.border = '';
+  subtitle.style.borderRadius = '';
+  subtitle.style.background = '';
+  subtitle.style.backgroundColor = '';
+  subtitle.style.textTransform = '';
+  Object.assign(subtitle.style, t.subtitleStyle);
+
+  // Data zone
+  dz.style.backgroundColor = t.ticketBg;
+  dz.style.padding = t.dataPadding;
+  dz.style.fontSize = t.dataFontSize;
+  dz.style.lineHeight = '1.4';
+
+  // Grids
+  const cols = t.gridCols;
+  gridTop.style.gridTemplateColumns = cols;
+  gridBottom.style.gridTemplateColumns = cols;
+  if (t.twoColGrid) {
+    gridTop.style.gridTemplateColumns = '80px 1fr';
+    gridBottom.style.gridTemplateColumns = '80px 1fr';
+  }
+  gridTop.style.rowGap = t.twoColGrid ? '16px' : '6px';
+  gridBottom.style.rowGap = t.twoColGrid ? '16px' : '6px';
+
+  // Labels, seps, values
+  document.querySelectorAll('.data-label').forEach(el => {
+    el.style.color = t.labelColor;
+    el.style.fontSize = t.labelFontSize || '';
+    el.style.fontWeight = t.labelFontWeight || '';
+    el.style.letterSpacing = t.labelLetterSpacing || '';
+  });
+  document.querySelectorAll('.data-sep').forEach(el => {
+    el.textContent = t.sepChar;
+    el.style.color = t.sepColor;
+    el.style.opacity = t.sepChar ? '0.6' : '0';
+    el.style.fontFamily = 'monospace';
+    if (t.twoColGrid) {
+      el.style.display = 'none';
+    } else {
+      el.style.display = '';
+    }
+  });
+  document.querySelectorAll('.data-value').forEach(el => {
+    el.style.color = t.textColor;
+    el.style.fontWeight = t.valueFontWeight || '';
+    el.style.fontSize = t.valueFontSize || '';
+    el.style.letterSpacing = t.valueLetterSpacing || '';
+    el.style.textAlign = t.valueAlign || '';
+    if (t.twoColGrid) {
+      el.style.gridColumn = '2';
+    } else {
+      el.style.gridColumn = '3';
+    }
+  });
+  // Spacer
+  document.querySelectorAll('.data-spacer').forEach(el => {
+    if (t.twoColGrid) {
+      el.style.gridColumn = '1 / -1';
+    }
+  });
+
+  // Divider
+  if (t.dividerCustom) {
+    divider.textContent = '';
+    divider.innerHTML = '<div style="position:absolute;top:0;left:0;width:' + (t.dividerFillWidth || '75%') + ';height:100%;background:' + (t.dividerFillColor || '#FF3B00') + ';"></div>';
+  } else {
+    divider.textContent = t.dividerText;
+  }
+  Object.assign(divider.style, {
+    letterSpacing: '',
+    opacity: '',
+    fontSize: '',
+    margin: '',
+    color: '',
+    fontFamily: '',
+    textAlign: '',
+    padding: '',
+    background: '',
+    borderTop: '',
+    borderBottom: '',
+    lineHeight: '1',
+    fontWeight: '',
+    height: '',
+    position: '',
+    overflow: '',
+  });
+  Object.assign(divider.style, t.dividerStyle);
+
+  // Footer
+  footer.style.borderTop = t.footerBorder;
+  footer.style.paddingTop = t.footerPadding;
+  footer.style.fontSize = t.footerFontSize;
+  footer.style.fontWeight = t.footerFontWeight || '';
+  if (t.footerBg) footer.style.background = t.footerBg;
+  else footer.style.background = '';
+
+  footerMain.style.marginBottom = '6px';
+  footerMain.style.fontWeight = t.footerFontWeight || '500';
+
+  footerSub.style.opacity = t.footerSubOpacity || 0.4;
+  footerSub.style.color = t.footerSubColor || '';
+  footerSub.style.fontFamily = t.footerSubFont || '';
+  footerSub.style.fontSize = t.footerSubFontSize || '';
+
+  // Bullet
+  Object.assign(bullet.style, {
+    backgroundColor: '',
+    borderRadius: '',
+    opacity: '',
+    boxShadow: '',
+  });
+  Object.assign(bullet.style, t.bulletStyle);
+
+  // Switch button
+  btn.style.backgroundColor = t.switchBtnBg;
+  btn.style.color = t.switchBtnColor;
+  btn.style.fontFamily = t.font;
+  mouseState.mode = t.mouseMode || 'attract';
+  mouseState.strength = typeof t.mouseStrength === 'number' ? t.mouseStrength : 0.9;
+
+  // Rebuild shader
+  if (gl) {
+    buildShader(t);
+    startRender();
+  }
+}
+
+function nextTheme() {
+  currentTheme = (currentTheme + 1) % themes.length;
+  applyTheme(currentTheme);
+}
+
+// ========================================================
+// INIT
+// ========================================================
+window.addEventListener('load', () => {
+  initGL();
+  initMouseTracking();
+  applyTheme(currentTheme);
+});
+</script>
+
+</body>
+</html>
