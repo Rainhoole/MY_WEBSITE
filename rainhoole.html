@@ -71,6 +71,7 @@
   .data-sep { grid-column: 2; }
   .data-value { grid-column: 3; }
   .data-spacer { grid-column: 1 / -1; height: 10px; }
+  #val8 { line-height: 1.35; }
 
   .texture-divider {
     white-space: nowrap;
@@ -135,7 +136,8 @@
   @media (min-width: 600px) {
     .ticket-wrapper {
       width: 800px;
-      height: 420px;
+      min-height: 440px;
+      height: auto;
       flex-direction: row;
     }
   }
